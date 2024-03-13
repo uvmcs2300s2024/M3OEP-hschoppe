@@ -17,7 +17,8 @@
     	</header>
         <?php
         
-        $file_name = basename($_FILES["test-cases"]["name"]);
+        $file_name = basename($_FILES["test-cases"]["name"]); //Replace test-cases with what we are feeding in
+        //Delete name?? name should be what is witheld - so update that as well perchance
         
         //Confirm file exists and get Waldo x/y
         if (file_exists($file_name)) {
@@ -44,7 +45,7 @@
 
         //Display image
 
-        //Run javascript program
+        //Run javascript program with two param, x and y
 
 
         ?>
