@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Hailey Schoppe">
+    <title>Where's Waldo?</title>
+    <!-- TODO: Update description -->
+    <meta name="description" content="This page hosts a game of Where's Waldo">
+    <link href="style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+<header>
+    <h2>Where's Waldo?</h2>
+    <!-- TODO: Update heading -->
+    <h3>Open Ended Project 3 - Hailey Schoppe - CS2300</h3>
+</header>
+
+<p>Welcome to Where's Waldo, a game about spotting Waldo in as few guesses as possible!</p>
+<p>Upload an image file that includes Waldo hidden somewhere within it. If Waldo is not found, the game will default to an image that we have.</p>
+<p>The game will then locate Waldo and, based on where you click, tell you how far away you are!</p>
+
+<!-- This is where it calls process.php when you submit the file -->
+<form enctype="multipart/form-data" action="process.php" method="POST">
+    <p>Upload your image file including Waldo:</p>
+    <input type="file" name="test-cases" /><br />
+    <input type="submit" value="Upload" />
+</form>
+</body>
+</html>
+
