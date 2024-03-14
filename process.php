@@ -53,6 +53,7 @@
         <!-- https://stackoverflow.com/questions/26065495/php-echo-to-display-image-html -->
 
         <img id="map" src="images/gallery/<?php echo $image; ?>"> <!-- TODO: change path if needed -->
+        <p id="printed_text"></p>
 
         <script>
             //How to take in x and y??
@@ -90,10 +91,10 @@
                 } else if (distance < 200) {
                     print_distance = "Pretty far";
                 } else {
-                    print_distance = "Quite far";
+                    print_distance =  "Quite far";
                 }
 
-                $("distance").text(print_distance);
+                $("printed_text").text(print_distance);
                 if (distance < 8) {
                     alert("Congrats! You found him in " + counter + " guesses!");
                 }
