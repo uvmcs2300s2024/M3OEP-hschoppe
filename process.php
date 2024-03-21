@@ -16,33 +16,71 @@
     		<h3>M3 Open Ended Project - Hailey Schoppe - CS2300</h3>
     	</header>
         <?php
-        
-        $file_name = basename($_FILES["test-cases"]["name"]); //Replace test-cases with what we are feeding in
-        echo $file_name;
+
+        //clear uploads directory: 
+        //https://stackoverflow.com/questions/4594180/deleting-all-files-from-a-folder-using-php
+        //get all file names:
+        $files = glob('path/to/temp/*');
+        //iterate through existing image files:
+        foreach($files as $file) {
+            if(is_file($file)) {
+                unlink($file);
+            }
+        }
+
+        //set new directory for image(s) to be uploaded into
+        //https://www.w3schools.com/php/php_file_upload.asp
+
+        $target_dir = "uploads/";
+        $file_name = $target_dir . basename($_FILES["test-cases"]["name"]); //Replace test-cases with what we are feeding in
+        $upload_valid = 1;
         //Delete name?? name should be what is witheld - so update that as well perchance
         
-        //Confirm file exists and get Waldo x/y
-        if (!file_exists($file_name)) {
-            // https://stackoverflow.com/questions/173868/how-can-i-get-a-files-extension-in-php
-            $ext = pathinfo($file_name, PATHINFO_EXTENSION);
+        // https://stackoverflow.com/questions/173868/how-can-i-get-a-files-extension-in-php
+        $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
-            if ($ext == "jpg" || $ext == "jpeg" || $ext == "png") {
-                // Open python file with image
-                $output = shell_exec("python locate.py " . $file_name);
-                if ($output == true) {
-                    $image = $file_name;
-                    $x_val = shell_exec("python find_x.py" . $file_name);
-                    $y_val = shell_exec("python find_y.py" . $file_name);
-                } else {
-                    $file_name = "WHERESWALDO.png";
-                }
+        if(isset($_POST["submit"])) {
+            $check = getimagesize($_FILES["test-cases"]["tmp_name"]);
+            if($check !== false) {
+                $upload_valid = 1;
             } else {
-                echo "File has invalid extension. Please submit a valid image file in the directory.";
+                upload_valid = 0;
             }
-
-        } else {
-            echo "File does not exist. Please submit a valid image file in the directory.";
         }
+
+        if (file_exists($target_file)) {
+            $upload_valid = 0;
+        }
+
+        if ($upload_valid = 1) {
+            if(move_uploaded_file($_FILES["test-cases"]["tmp_name"], $file_name)) {
+                $upload_valid = 1;
+
+
+                //The file is now stored in database that can be accessed. 
+                $image_name = $target_dir . $file_name;
+
+                //Runs locate.py with the updated file location
+                $output = shell_exec("python locate.py " . $image_name);
+                if($output == true) {
+                    $x_val = shell_exec("python find_x.py" . $image_name);
+                    $y_val = shell_exec("python find_y.py" . $image_name);
+                } else {
+                    echo "Waldo could not be found in this image. Using our image.";
+                    $image_name = WHERESWALDO.png;
+                    $x_val = shell_exec("python find_x.py" . $image_name);
+                    $y_val = shell_exec("python find_y.py" . $image_name);
+
+                }
+            }
+            else {
+                echo "Invalid image file";
+            }
+        } else {
+            echo "Invalid image file";
+        }
+
+        echo $image_name;
 
         //Display image
 
@@ -53,7 +91,7 @@
 
         <!-- https://stackoverflow.com/questions/26065495/php-echo-to-display-image-html -->
 
-        <img id="map" src="<?php echo $file_name;  ?>"> <!-- TODO: change path if needed -->
+        <img id="map" type="file" src="<?php echo $image_name;  ?>"> <!-- TODO: change path if needed -->
         <p id="printed_text"></p>
 
         <script>
