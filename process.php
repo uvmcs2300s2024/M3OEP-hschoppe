@@ -10,11 +10,11 @@
         <link href="style.css" rel="stylesheet" type="text/css" media="screen" />
     </head>
     <body>
-    	<header>
-    		<h2>Where's Waldo?</h2>
-    		<!-- TODO: Change this h3 to your function name -->
-    		<h3>M3 Open Ended Project - Hailey Schoppe - CS2300</h3>
-    	</header>
+        <header>
+            <h2>Where's Waldo?</h2>
+            <!-- TODO: Change this h3 to your function name -->
+            <h3>M3 Open Ended Project - Hailey Schoppe - CS2300</h3>
+        </header>
         <?php
 
         //clear uploads directory: 
@@ -48,17 +48,17 @@
             }
         }
 
-        if (file_exists($target_file)) {
+        if (file_exists($file_name)) {
             $upload_valid = 0;
         }
 
-        if ($upload_valid = 1) {
+        if ($upload_valid == 1) {
             if(move_uploaded_file($_FILES["test-cases"]["tmp_name"], $file_name)) {
                 $upload_valid = 1;
 
 
                 //The file is now stored in database that can be accessed. 
-                $image_name = $target_dir . $file_name;
+                $image_name = $file_name;
 
                 //Runs locate.py with the updated file location
                 $output = shell_exec("python locate.py " . $image_name);
@@ -74,10 +74,16 @@
                 }
             }
             else {
-                echo "Invalid image file";
+                echo "Invalid image file. Using our image";
+                $image_name = WHERESWALDO.png;
+                $x_val = shell_exec("python find_x.py" . $image_name);
+                $y_val = shell_exec("python find_y.py" . $image_name);
             }
         } else {
-            echo "Invalid image file";
+            echo "Invalid image file. Using our image.";
+            $image_name = WHERESWALDO.png;
+            $x_val = shell_exec("python find_x.py" . $image_name);
+            $y_val = shell_exec("python find_y.py" . $image_name);
         }
 
         echo $image_name;
@@ -91,7 +97,7 @@
 
         <!-- https://stackoverflow.com/questions/26065495/php-echo-to-display-image-html -->
 
-        <img id="map" type="file" src="<?php echo $image_name;  ?>"> <!-- TODO: change path if needed -->
+        <img id="map" src="<?php echo $image_name;  ?>"> <!-- TODO: change path if needed -->
         <p id="printed_text"></p>
 
         <script>
@@ -100,7 +106,7 @@
             var y_pos = "<?php echo $y_val; ?>";
 
             //Height and width of image
-            var image = "<?php echo $file_name; ?>";
+            var image = "<?php echo $image_name; ?>";
             //https://stackoverflow.com/questions/623172/how-to-get-the-image-size-height-width-using-javascript
             //TODO - Double check
             var width = document.querySelector(image).offsetWidth;
