@@ -18,10 +18,11 @@
         <?php
         
         $file_name = basename($_FILES["test-cases"]["name"]); //Replace test-cases with what we are feeding in
+        echo $file_name;
         //Delete name?? name should be what is witheld - so update that as well perchance
         
         //Confirm file exists and get Waldo x/y
-        if (file_exists($file_name)) {
+        if (!file_exists($file_name)) {
             // https://stackoverflow.com/questions/173868/how-can-i-get-a-files-extension-in-php
             $ext = pathinfo($file_name, PATHINFO_EXTENSION);
 
@@ -33,7 +34,7 @@
                     $x_val = shell_exec("python find_x.py" . $file_name);
                     $y_val = shell_exec("python find_y.py" . $file_name);
                 } else {
-                    $file_name = "waldo.png";
+                    $file_name = "WHERESWALDO.png";
                 }
             } else {
                 echo "File has invalid extension. Please submit a valid image file in the directory.";
@@ -52,7 +53,7 @@
 
         <!-- https://stackoverflow.com/questions/26065495/php-echo-to-display-image-html -->
 
-        <img id="map" src="images/gallery/<?php echo $image; ?>"> <!-- TODO: change path if needed -->
+        <img id="map" src="<?php echo $image; ?>"> <!-- TODO: change path if needed -->
         <p id="printed_text"></p>
 
         <script>
