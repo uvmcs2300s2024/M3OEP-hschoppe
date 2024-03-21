@@ -17,76 +17,53 @@
         </header>
         <?php
 
-        //clear uploads directory: 
-        //https://stackoverflow.com/questions/4594180/deleting-all-files-from-a-folder-using-php
-        //get all file names:
-        $files = glob('path/to/temp/*');
-        //iterate through existing image files:
-        foreach($files as $file) {
-            if(is_file($file)) {
-                unlink($file);
-            }
-        }
-
         //set new directory for image(s) to be uploaded into
         //https://www.w3schools.com/php/php_file_upload.asp
 
-        $target_dir = "uploads/";
-        $file_name = $target_dir . basename($_FILES["test-cases"]["name"]); //Replace test-cases with what we are feeding in
-        $upload_valid = 1;
-        //Delete name?? name should be what is witheld - so update that as well perchance
+        $file_name = basename($_FILES["test-cases"]["name"]); //Replace test-cases with what we are feeding in
         
         // https://stackoverflow.com/questions/173868/how-can-i-get-a-files-extension-in-php
         $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
-        if(isset($_POST["submit"])) {
-            $check = getimagesize($_FILES["test-cases"]["tmp_name"]);
-            if($check !== false) {
-                $upload_valid = 1;
-            } else {
-                upload_valid = 0;
-            }
-        }
-
-        if (file_exists($file_name)) {
-            $upload_valid = 0;
-        }
-
-        if ($upload_valid == 1) {
-            if(move_uploaded_file($_FILES["test-cases"]["tmp_name"], $file_name)) {
-                $upload_valid = 1;
-
-
-                //The file is now stored in database that can be accessed. 
-                $image_name = $file_name;
-
-                //Runs locate.py with the updated file location
-                $output = shell_exec("python locate.py " . $image_name);
-                if($output == true) {
-                    $x_val = shell_exec("python find_x.py" . $image_name);
-                    $y_val = shell_exec("python find_y.py" . $image_name);
+        if($ext == ".jpg" || $ext = ".png" || $ext == ".jpeg") {
+            if(isset($_POST["submit"])) {
+                $check = getimagesize($_FILES["test-cases"]["tmp_name"]);
+                if($check !== false) {
+                    $upload_valid = 1;
                 } else {
-                    echo "Waldo could not be found in this image. Using our image.";
-                    $image_name = WHERESWALDO.png;
-                    $x_val = shell_exec("python find_x.py" . $image_name);
-                    $y_val = shell_exec("python find_y.py" . $image_name);
-
+                    upload_valid = 0;
                 }
             }
-            else {
-                echo "Invalid image file. Using our image";
-                $image_name = WHERESWALDO.png;
-                $x_val = shell_exec("python find_x.py" . $image_name);
-                $y_val = shell_exec("python find_y.py" . $image_name);
-            }
-        } else {
-            echo "Invalid image file. Using our image.";
-            $image_name = WHERESWALDO.png;
-            $x_val = shell_exec("python find_x.py" . $image_name);
-            $y_val = shell_exec("python find_y.py" . $image_name);
         }
 
-        echo $image_name;
+        $rand_number = uploads;
+
+        $command_mkdir = escapeshellcmd("mkdir " . $rand_number);
+        $output_mkdir = shell_exec($command_mkdir);
+
+        //Copy files into folder
+        $output_cp = shell_exec("cp locate.py " . $rand_number);
+        $output_cp2 = shell_exec("cp find_x.py " . $rand_number);
+        $output_cp3 = shell_exec("cp find_y.py " . $rand_number);
+
+        if(move_uploaded_file($_FILES["test-cases"]["tmp_name"], $rand_number . "/" . $file_name)) {
+
+            $output = shell_exec("cd " . $rand_number . ";chmod +x output.py;python output.py " . $file_name . ";cd ..");
+            if ($output) {
+                $image_name = $file_name;
+            } else {
+                $image_name = WHERESWALDO.png;
+            }
+            
+        } else {
+            $image_name = WHERESWALDO.png;
+        }
+        
+        $x_val = shell_exec("cd " . $rand_number . ";chmod +x find_x.py;python find_x.py " . $image_name . ";cd ..");
+        $y_val = shell_exec("cd " . $rand_number . ";chmod +x find_y.py;python find_y.py " . $image_name . ";cd ..");
+
+        $final_name = $rand_number . $image_name;
+        //Save path to file name - need to be able to access image file from js code
 
         //Display image
 
@@ -97,7 +74,7 @@
 
         <!-- https://stackoverflow.com/questions/26065495/php-echo-to-display-image-html -->
 
-        <img id="map" src="<?php echo $image_name;  ?>"> <!-- TODO: change path if needed -->
+        <img id="map" src="<?php echo $final_name;  ?>"> <!-- TODO: change path if needed -->
         <p id="printed_text"></p>
 
         <script>
@@ -106,7 +83,7 @@
             var y_pos = "<?php echo $y_val; ?>";
 
             //Height and width of image
-            var image = "<?php echo $image_name; ?>";
+            var image = "<?php echo $final_name; ?>";
             //https://stackoverflow.com/questions/623172/how-to-get-the-image-size-height-width-using-javascript
             //TODO - Double check
             var width = document.querySelector(image).offsetWidth;
