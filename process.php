@@ -15,15 +15,19 @@
             <!-- TODO: Change this h3 to your function name -->
             <h3>M3 Open Ended Project - Hailey Schoppe - CS2300</h3>
         </header>
+
         <?php
 
         //set new directory for image(s) to be uploaded into
         //https://www.w3schools.com/php/php_file_upload.asp
 
-        $file_name = basename($_FILES["test-cases"]["name"]); //Replace test-cases with what we are feeding in
+        $file_name = basename($_FILES["test-cases"]["name"]);
+        echo $file_name; 
+        //Replace test-cases with what we are feeding in
         
         // https://stackoverflow.com/questions/173868/how-can-i-get-a-files-extension-in-php
         $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+        echo $ext;
 
         if($ext == ".jpg" || $ext = ".png" || $ext == ".jpeg") {
             if(isset($_POST["submit"])) {
@@ -36,15 +40,24 @@
             }
         }
 
-        $rand_number = uploads;
+        echo $final_name = basename( $_FILES["test-cases"]["name"]);
+        echo $file_size =  $_FILES["test-cases"]["size"];
+        echo $fileType = strtolower(pathinfo($file_name,PATHINFO_EXTENSION));
+
+        $final_name = $file_name;
+
+        $rand_number = 'uploads';
 
         $command_mkdir = escapeshellcmd("mkdir " . $rand_number);
         $output_mkdir = shell_exec($command_mkdir);
 
         //Copy files into folder
-        $output_cp = shell_exec("cp locate.py " . $rand_number);
-        $output_cp2 = shell_exec("cp find_x.py " . $rand_number);
-        $output_cp3 = shell_exec("cp find_y.py " . $rand_number);
+        $run_cp = escapeshellcmd("cp locate.py " . $rand_number)
+        $output_cp = shell_exec($run_cp);
+        $run_cp2 = escapeshellcmd("cp find_x.py " . $rand_number)
+        $output_cp2 = shell_exec($run_cp2);
+        $run_cp3 = escapeshellcmd("cp find_y.py " . $rand_number)
+        $output_cp3 = shell_exec($run_cp3);
 
         if(move_uploaded_file($_FILES["test-cases"]["tmp_name"], $rand_number . "/" . $file_name)) {
 
@@ -57,7 +70,7 @@
             
         } else {
             $image_name = WHERESWALDO.png;
-        }
+        } 
         
         $x_val = shell_exec("cd " . $rand_number . ";chmod +x find_x.py;python find_x.py " . $image_name . ";cd ..");
         $y_val = shell_exec("cd " . $rand_number . ";chmod +x find_y.py;python find_y.py " . $image_name . ";cd ..");
@@ -65,16 +78,12 @@
         $final_name = $rand_number . $image_name;
         //Save path to file name - need to be able to access image file from js code
 
-        //Display image
-
-        //Run javascript program with two param, x and y
-
 
         ?>
 
         <!-- https://stackoverflow.com/questions/26065495/php-echo-to-display-image-html -->
 
-        <img id="map" src="<?php echo $final_name;  ?>"> <!-- TODO: change path if needed -->
+        <img id="map" src="<?php echo $final_name\; ?>'\" size = "<?php echo $file_size; ?>" type= "<?php echo $fileType; ?>"> 
         <p id="printed_text"></p>
 
         <script>
