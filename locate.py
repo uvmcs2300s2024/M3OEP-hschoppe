@@ -6,18 +6,30 @@ image = cv2.imread(sys.argv[1])
 image_grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 #Read in Waldo
-waldo = cv2.imread('waldo.png',0)
-height = waldo.shape[0]
-width = waldo.shape[1]
+waldo_01 = cv2.imread('waldo01.png',0)
+waldo_02 = cv2.imread('waldo02.png',0)
+waldo_03 = cv2.imread('waldo03.png',0)
+height_w1 = waldo_01.shape[0]
+width_w1 = waldo_01.shape[1]
+height_w2 = waldo_02.shape[0]
+width_w2 = waldo_02.shape[1]
+height_w3 = waldo_03.shape[0]
+width_w3 = waldo_03.shape[1]
 
-find = cv.matchTemplate(image_grey,waldo,cv.TM_CCOEFF_NORMED)
+find_w1 = cv.matchTemplate(image_grey,waldo_01,cv.TM_CCOEFF_NORMED)
+find_w2 = cv.matchTemplate(image_grey,waldo_02,cv.TM_CCOEFF_NORMED)
+find_w3 = cv.matchTemplate(image_grey,waldo_03,cv.TM_CCOEFF_NORMED)
+
 threshold = 0.6
 
-location = np.where(find >= threshold)
+location_w1 = np.where(find_w1 >= threshold)
+location_w2 = np.where(find_w2 >= threshold)
+location_w3 = np.where(find_w3 >= threshold)
+
 
 #find x - print(location[0] + (width / 2))
 #find y - print(location[1] + (height / 2))
-if location:
+if location_w1 or location_w2 or location_w3:
     print('true')
 else:
     print('false')

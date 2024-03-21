@@ -53,7 +53,7 @@
 
         <!-- https://stackoverflow.com/questions/26065495/php-echo-to-display-image-html -->
 
-        <img id="map" src="<?php echo $image; ?>"> <!-- TODO: change path if needed -->
+        <img id="map" src="<?php echo $file_name;  ?>"> <!-- TODO: change path if needed -->
         <p id="printed_text"></p>
 
         <script>
