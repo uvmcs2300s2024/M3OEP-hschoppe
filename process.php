@@ -66,6 +66,8 @@
         $output_cp2 = shell_exec($run_cp2);
         $run_cp3 = escapeshellcmd("cp find_y.py " . $rand_number);
         $output_cp3 = shell_exec($run_cp3);
+        $run_img = escapeshellcmd("cp " . $file_name . " " . $rand_number);
+        $output_img = shell_exec($run_img);
 
         echo " yee to the haw";
 
