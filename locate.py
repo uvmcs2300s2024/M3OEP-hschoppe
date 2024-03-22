@@ -30,6 +30,6 @@ location_w3 = np.where(find_w3 >= threshold)
 #find x - print(location[0] + (width / 2))
 #find y - print(location[1] + (height / 2))
 if location_w1 or location_w2 or location_w3:
-    print('true')
+    print("true")
 else:
-    print('false')
+    print("false")
