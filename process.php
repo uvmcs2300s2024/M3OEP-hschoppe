@@ -54,6 +54,9 @@
         echo "    ";
         echo $file_size; //Works through here
 
+        $command_rmdir = escapeshellcmd("rm -r " . $rand_number);
+        $output_rmdir = shell_exec($command_rmdir);
+
         $command_mkdir = escapeshellcmd("mkdir " . $rand_number);
         $output_mkdir = shell_exec($command_mkdir);
 
@@ -66,22 +69,30 @@
         $output_cp2 = shell_exec($run_cp2);
         $run_cp3 = escapeshellcmd("cp find_y.py " . $rand_number);
         $output_cp3 = shell_exec($run_cp3);
-        $run_img = escapeshellcmd("cp " . $file_name . " " . $rand_number);
-        $output_img = shell_exec($run_img);
+        //$run_img = escapeshellcmd("cp " . $file_name . " " . $rand_number);
+        //$output_img = shell_exec($run_img);
+        $run_waldo1 = escapeshellcmd("cp waldo01.png " . $rand_number);
+        $output_waldo1 = shell_exec($run_waldo1);
+        $run_waldo2 = escapeshellcmd("cp waldo02.png " . $rand_number);
+        $output_waldo2 = shell_exec($run_waldo2);
+        $run_waldo3 = escapeshellcmd("cp waldo03.png " . $rand_number);
+        $output_waldo3 = shell_exec($run_waldo3);
 
         echo " yee to the haw";
 
         if(move_uploaded_file($_FILES["test-cases"]["tmp_name"], $rand_number . "/" . $file_name)) {
 
-            $command_output = escapeshellcmd("cd " . $rand_number . ";chmod +x locate.py;python locate.py " . $file_name . ";cd ..");
-            $output = shell_exec($command_output);
+            echo $file_name;
+
+            $output_escmd = escapeshellcmd("cd " . $rand_number . ";chmod +x locate.py;python locate.py " . $file_name . ";cd ..");
+            $output = shell_exec($output_escmd);
             echo "okay";
             echo $output;
             if ($output) {
                 $image_name = $file_name;
                 echo "dokey";
             } else {
-                $image_name = WHERESWALDO.png;
+                $image_name = WHERESWALDO.jpg;
                 echo "oops";
             }
             echo $image_name;
