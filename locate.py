@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import sys
-print("Test")
+#print("Test")
 
 #Read in image and convert it to grey
 image = cv2.imread(sys.argv[1])
@@ -27,8 +27,8 @@ threshold = 0.6
 location_w1 = np.where(find_w1 >= threshold)
 location_w2 = np.where(find_w2 >= threshold)
 location_w3 = np.where(find_w3 >= threshold)
-print(find_w1)
-print(location_w1)
+#print(find_w1)
+#print(location_w1)
 
 #find x - print(location[0] + (width / 2))
 #find y - print(location[1] + (height / 2))
