@@ -17,17 +17,16 @@
         </header>
 
         <?php 
-        //set new directory for image(s) to be uploaded into
         //https://www.w3schools.com/php/php_file_upload.asp
 
+        //Reads in the filename
         $file_name = basename($_FILES["test-cases"]["name"]);
-        //echo $file_name; 
-        //Replace test-cases with what we are feeding in
         
         // https://stackoverflow.com/questions/173868/how-can-i-get-a-files-extension-in-php
+        //Gets file extension
         $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-        //echo $ext;
 
+        //Verifies validity of files
         if($ext == "jpg" || $ext = "png" || $ext == "jpeg") {
             if(isset($_POST["submit"])) {
                 $check = getimagesize($_FILES["test-cases"]["tmp_name"]);
@@ -43,27 +42,22 @@
             $upload_valid = 0;
         }
 
-        //echo $upload_valid; //Success!
+        //Saves file name for later printing
 
         $final_name = basename( $_FILES["test-cases"]["name"]);
-        $file_size =  $_FILES["test-cases"]["size"];
-        $fileType = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-        echo $final_name;
-        echo $file_size;
-        echo $fileType;
+        //$file_size =  $_FILES["test-cases"]["size"];
+        //$fileType = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
+        //Creates a directory for the image to be placed into
         $rand_number = 'uploads';
-        //echo $rand_number;
-        //echo "    ";
-        //echo $file_size; //Works through here
 
+        //Deletes directory between uses
         $command_rmdir = escapeshellcmd("rm -r " . $rand_number);
         $output_rmdir = shell_exec($command_rmdir);
 
+        //Makes directory
         $command_mkdir = escapeshellcmd("mkdir " . $rand_number);
         $output_mkdir = shell_exec($command_mkdir);
-
-        //echo "  Made it here!";
 
         //Copy files into folder
         $run_cp = escapeshellcmd("cp locate.py " . $rand_number);
@@ -83,48 +77,47 @@
         $run_ww = escapeshellcmd("cp WHERESWALDO.jpg " . $rand_number);
         $output_ww = shell_exec($run_ww);
 
-        //echo " yee to the haw";
-
+        //Moves image file into folder
         if(move_uploaded_file($_FILES["test-cases"]["tmp_name"], $rand_number . "/" . $file_name)) {
-
-            echo $file_name;
 
             $escmd = escapeshellcmd($file_name);
 
             $cmd = "cd " . $rand_number . ";chmod +x locate.py;python locate.py " . $escmd . ";cd ..";
-            echo $cmd;
 
-            $output = shell_exec("cd " . $rand_number . ";chmod +x locate.py;python locate.py " . $escmd . ";cd .. 2>&1");
-            //$output = shell_exec($output_escmd);
-            echo "okay";
-            echo $output;
+            //Runs python file to find waldo
+            $output = shell_exec("cd " . $rand_number . ";chmod +x locate.py;/opt/rh/rh-python38/root/usr/bin/python locate.py " . $escmd . " 2>&1;cd ..");
+            //Uses results:
             if ($output) {
                 $image_name = $file_name;
-                echo "dokey";
+                $message = "This image does have Waldo!";
+
             } else {
                 $image_name = "WHERESWALDO.jpg";
-                echo "oops";
+                $message = "This image does not have Waldo";
             }
-            echo $image_name;
             
         } else {
             $image_name = "WHERESWALDO.jpg";
-            echo "zoinks";
+            $message = "Image could not be loaded.";
         }
 
-        echo "wowzers!";
+        //The following was code that I did not end up using
+        //Initially I was going to make it so that depending on where you click it told you how far away from waldo you are
+        //Unforunately, I ran out of time
+        //$final_name = $image_name;
 
         //$x_val_1 = escapeshellcmd("cd " . $rand_number . ";chmod +x find_x.py;python find_x.py " . $file_name . ";cd ..");
         //$x_val = shell_exec(x_val_1);
         //$y_val_1 = escapeshellcmd("cd " . $rand_number . ";chmod +x find_y.py;python find_y.py " . $file_name . ";cd ..");
         //$y_val = shell_exec(y_val_1);
 
-        echo "Here";
         ?>
+
+        <!-- Displays the image and text -->
 
         <img id="map" src="uploads/<?php echo $final_name; ?>"> <!--  size = "<?php echo $file_size; ?>" type= "<?php echo $fileType; ?>" -->
         <!-- <img src="WHERESWALDO.jpg" alt="Waldo"> -->
-        <p id="printed_text"></p>
+        <p id="printed_text"> <?php echo $message; ?> </p>
 
         
     </body>
